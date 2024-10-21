@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title> Product-card project </title>
+    </head>
+
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .main {
+            width: 1320px;
+            display: flex;
+            margin: auto;
+        }
+
+        .header {
+            background-color: blanchedalmond;
+            height: 60px;
+        }
+
+        h1 {
+            text-align: center;
+            text-transform: capitalize;
+            padding-top: 10px;
+            color: #222;
+
+        }
+
+        .filterbox {
+            flex-basis: 23%;
+
+        }
+
+        .product {
+            flex-basis: 75%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .catogorylist {
+            margin-top: 20px;
+        }
+
+        .catogorylist label {
+            display: block;
+            padding: 8px 0px;
+        }
+
+        .productitems {
+            flex-basis: 31%;
+            box-shadow: 0px 0px 10px 2px #ccc;
+            margin-bottom: 20px;
+        }
+
+        .productitems img {
+            width: 100%;
+            height: 260px;
+        }
+
+        .productitems p {
+            padding: 10px 15px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .productitems h4 {
+            padding: 10px 15px;
+            font-size: 16px;
+            line-height: 1.2;
+
+        }
+
+        .productitems h5 {
+
+            padding: 10px 15px;
+
+        }
+
+        .main {
+            margin-top: 60px;
+        }
+    </style>
+
+
+
+
+    <body>
+        <div class="header">
+            <h1>our product</h1>
+        </div>
+
+        <div class="main">
+            <div class="filterbox">
+                <h2>catogory</h2>
+                <div class="catogorylist">
+                    <!-- <label for="">
+                        <input type="checkbox">
+                    </label> -->
+                    
+
+                </div>
+            </div>
+            <div class="product">
+                <div class="productitems">
+                    <img src="https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg" alt="this bag img">
+                    <p>price Rs. 109.95 | 3.9</p>
+                    <h4>
+                        Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops
+                    </h4>
+                </div>
+            </div>
+        </div>
+
+
+
+        <script>
+            // let checkCat = ["men's clothing"]
+            // console.log(checkCat.includes("men's clothing"));
+            
+            let productDiv = document.querySelector(".product");
+            let catogorylistDiv = document.querySelector(".catogorylist");
+            
+            let allCat = [];
+            let displayProduct = async (allCheckCat=[]) => {
+                // console.log(allCheckCat);    
+                
+                productDiv.innerHTML = '';
+                let product = await fetch('https://fakestoreapi.com/products');
+                let finalproduct = await product.json();
+                finalproduct.forEach(element => {
+                    
+                    if(!allCat.includes(element.category)){
+                        catogorylistDiv.innerHTML+= `<label>
+                            <input type="checkbox" onclick = 'categoryFilter()' value="${element.category}">${element.category}
+                            </label>` ;
+
+                            allCat.push(element.category)
+
+                    }
+
+                    if(allCheckCat.length==0){
+                        allCheckCat=allCat;
+                    }
+
+                    if(allCheckCat.includes(element.category)){
+    
+                         productDiv.innerHTML += `<div class="productitems">
+                         <img src=" ${element.image}" alt="this bag img">
+                         <h5>${element.category}</h5>
+                         <p>price Rs. ${element.price} | ${element.rating.rate}</p>
+                         <h4>
+                             ${element.title}
+                         </h4>
+                     </div>`
+                    
+                    }
+
+
+                });
+
+            }
+
+            displayProduct();
+
+            
+            let categoryFilter = () =>{
+                let checkInput=document.querySelectorAll("input[type='checkbox']");
+                let checkdata = [];
+                checkInput.forEach((e)=>{
+                    if(e.checked){
+                        checkdata.push(e.value);
+                        
+                    }
+                    
+                })
+                
+                displayProduct(checkdata);
+            }
+
+
+
+
+            // fetch('https://fakestoreapi.com/products').then((responsetojson)=>console.log(responsetojson)).then() 
+            // fetch('https://fakestoreapi.com/products').then((restojson) => restojson.json()).then((response) => {
+            //     console.log(response);
+
+            // })
+
+
+
+
+        </script>
+    </body>
+
+</html>
